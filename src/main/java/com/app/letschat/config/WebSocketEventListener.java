@@ -2,6 +2,7 @@ package com.app.letschat.config;
 
 import com.app.letschat.domain.ChatMessage;
 import com.app.letschat.domain.MessageType;
+import com.app.letschat.domain.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -18,11 +19,11 @@ public class WebSocketEventListener {
   @EventListener
   public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
     StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-    String username = (String) headerAccessor.getSessionAttributes().get("username");
-    if (username != null) {
+    User user = (User) headerAccessor.getSessionAttributes().get("user");
+    if (user != null) {
       ChatMessage chatMessage = ChatMessage.builder()
           .type(MessageType.LEAVE)
-          .sender(username)
+          .sender(user)
           .build();
       messagingTemplate.convertAndSend("/topic/public", chatMessage);
     }

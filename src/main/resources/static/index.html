@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LetsChat</title>
+  <style>
+      /* Add your custom CSS styles here */
+      .popup {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          display: none;
+          width: 200px;
+          background-color: #f9f9f9;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          padding: 10px;
+          text-align: center;
+      }
+
+      .popup.show {
+          display: block;
+      }
+  </style>
+</head>
+<body>
+<div>
+  <button type="button" onclick="showPopup('signInPopup')">Sign In</button>
+  <button type="button" onclick="showPopup('signUpPopup')">Sign Up</button>
+</div>
+
+<div id="signInPopup" class="popup">
+  <h4>Sign In</h4>
+  <input type="text" placeholder="Username">
+  <input type="password" placeholder="Password">
+  <button type="button" onclick="submitForm('signInPopup')">Submit</button>
+</div>
+
+<div id="signUpPopup" class="popup">
+  <h4>Sign Up</h4>
+  <input type="text" placeholder="Username" id="username">
+  <input type="password" placeholder="Password" id="password">
+  <button type="button" onclick="submitForm('signUpPopup')">Submit</button>
+</div>
+
+<script>
+  // Function to show the popup
+  function showPopup(popupId) {
+    let popup = document.getElementById(popupId);
+    popup.style.display = "block";
+  }
+
+  // Function to handle form submission
+  function submitForm(popupId) {
+    let popup = document.getElementById(popupId);
+    let inputs = popup.getElementsByTagName("input");
+    let username = inputs[0].value;
+    let password = inputs[1].value;
+
+    if (popupId === "signUpPopup") {
+      // Perform validation for username field
+      if (username.trim() === "") {
+        alert("Username cannot be empty.");
+        return;
+      }
+
+      // Perform validation for password field
+      if (password.trim() === "") {
+        alert("Password cannot be empty.");
+        return;
+      }
+    }
+
+    // Add your form submission logic here using username and password
+
+    // Clear input fields
+    inputs[0].value = "";
+    inputs[1].value = "";
+
+    // Hide the popup
+    popup.style.display = "none";
+  }
+</script>
+</body>
+</html>
