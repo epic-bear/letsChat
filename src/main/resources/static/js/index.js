@@ -1,3 +1,8 @@
+function hidePopup(popupId) {
+  let popup = document.getElementById(popupId);
+  popup.style.display = "none";
+}
+
 function showPopup(popupId) {
   let popup = document.getElementById(popupId);
   popup.style.display = "block";
@@ -31,5 +36,5 @@ function submitForm(popupId) {
   inputs[1].value = "";
 
   // Hide the popup
-  popup.style.display = "none";
+  hidePopup(popupId);
 }

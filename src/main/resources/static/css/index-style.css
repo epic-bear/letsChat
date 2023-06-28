@@ -14,8 +14,16 @@ body {
     border-radius: 4px;
     padding: 10px;
     text-align: center;
+
 }
 
 .popup.show {
     display: block;
+}
+
+.popup .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
 }
