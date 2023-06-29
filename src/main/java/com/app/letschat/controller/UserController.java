@@ -48,10 +48,9 @@ public class UserController {
   @GetMapping("/main")
   public String getMain(@ModelAttribute("username") String username, Model model) {
     User user = userService.getUser(username);
-    List<String> chatNames = user.getChats().stream().map(Chat::getName).collect(Collectors.toList());
 
     model.addAttribute("username", username);
-    model.addAttribute("chatNames", chatNames);
+    model.addAttribute("chats", user.getChats());
     return "main";
   }
 }

@@ -18,8 +18,17 @@
 
 <!-- List of User's Chats -->
 <ul id="chatsList">
-  <li th:each="chatName : ${chatNames}" th:text="${chatName}"></li>
+  <li th:each="chat : ${chats}" th:text="${chat.name}"></li>
 </ul>
+
+<!-- Chat Window -->
+<div id="chatWindow" class="popup">
+  <button class="close" onclick="closeChatWindow()">X</button>
+  <h4 id="chatTitle"></h4>
+  <ul id="chatMessages"></ul>
+  <input type="text" id="messageInput" placeholder="Type your message">
+  <button onclick="sendMessage()">Send</button>
+</div>
 
 <!-- Create Chat Popup -->
 <div id="createChatPopup" class="popup">
@@ -43,5 +52,7 @@
     popup.classList.remove("show");
   }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </body>
 </html>

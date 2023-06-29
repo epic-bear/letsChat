@@ -18,7 +18,7 @@ public class ChatController {
   }
 
   @PostMapping("/createChat")
-  public String createUser(@RequestParam("username") String username,
+  public String createChat(@RequestParam("username") String username,
       @RequestParam("chatName") String chatName, RedirectAttributes redirectAttributes) {
     chatService.createChat(username, chatName);
     redirectAttributes.addAttribute("username", username);

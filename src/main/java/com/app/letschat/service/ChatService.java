@@ -23,7 +23,7 @@ public class ChatService {
 
   public void createChat(String username, String chatName) {
     if (chatRepository.existsByName(chatName)) {
-      throw new IllegalArgumentException("Username already exists");
+      throw new IllegalArgumentException("Name already exists");
     }
 
     Chat chat = new Chat();
