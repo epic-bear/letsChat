@@ -19,22 +19,22 @@ public class UserService {
 
 
   public void createUser(String username, String password) {
-    if (userRepository.existsByName(username)) {
+    if (userRepository.existsByUsername(username)) {
       throw new IllegalArgumentException("Username already exists");
     }
 
     User user = new User();
-    user.setName(username);
+    user.setUsername(username);
     user.setPassword(password);
     userRepository.save(user);
   }
 
   public User getUser(String username) {
-    return userRepository.getUserByName(username);
+    return userRepository.getUserByUsername(username);
   }
 
   public boolean checkCredentials(String username, String password) {
-    User user = userRepository.getUserByName(username);
+    User user = userRepository.getUserByUsername(username);
     return user != null && user.getPassword().equals(password);
   }
 }

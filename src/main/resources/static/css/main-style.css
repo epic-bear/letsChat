@@ -15,3 +15,43 @@
 .navbar a:hover {
     background-color: #ddd;
 }
+
+/* CSS styling for the search form and create chat button */
+#chatSearchForm {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+#chatSearchInput {
+    padding: 5px;
+}
+
+#createChatButton {
+    margin-right: 10px;
+}
+
+/* CSS styling for the chat popup */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    width: 200px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    text-align: center;
+}
+
+.popup.show {
+    display: block;
+}
+
+.popup .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+}
