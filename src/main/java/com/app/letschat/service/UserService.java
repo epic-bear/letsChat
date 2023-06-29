@@ -7,4 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserService {
 
+  public void createUser(String username, String password) {
+
+  }
 }
