@@ -14,17 +14,19 @@
 <div id="signInPopup" class="popup">
   <button class="close" onclick="hidePopup('signInPopup')">X</button>
   <h4>Sign In</h4>
-  <input type="text" placeholder="Username">
-  <input type="password" placeholder="Password">
-  <button type="button" onclick="submitForm('signInPopup')">Submit</button>
+  <form id="signinForm" th:action="@{/getUser}" method="get">
+    <input type="text" placeholder="Username" name="username">
+    <input type="password" placeholder="Password" name="password">
+    <button type="submit">Submit</button>
+  </form>
 </div>
 
 <div id="signUpPopup" class="popup">
   <button class="close" onclick="hidePopup('signUpPopup')">X</button>
   <h4>Sign Up</h4>
   <form id="signupForm" th:action="@{/createUser}" method="post">
-    <input type="text" placeholder="Username" id="username" name="username">
-    <input type="password" placeholder="Password" id="password" name="password">
+    <input type="text" placeholder="Username" name="username">
+    <input type="password" placeholder="Password" name="password">
     <button type="submit">Submit</button>
   </form>
 </div>
