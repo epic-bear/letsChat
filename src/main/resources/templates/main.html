@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>LetsChat</title>
+  <link th:href="@{/css/main-style.css}" type="text/css" rel="stylesheet"/>
 </head>
 <body>
-<h2>Welcome</h2>
+<!-- Navbar -->
+<div class="navbar">
+  <form id="chatSearchForm">
+    <input type="text" id="chatSearchInput" placeholder="Search Chat">
+    <button type="submit">Search</button>
+  </form>
+  <button id="createChatButton">Create Chat</button>
+  <a href="#">Sign Out</a>
+</div>
+
+<!-- List of User's Chats -->
+<ul id="chatsList">
+
+</ul>
+
+<script src="js/main.js"></script>
 </body>
 </html>
