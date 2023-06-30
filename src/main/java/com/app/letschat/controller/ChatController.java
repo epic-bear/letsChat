@@ -1,7 +1,13 @@
 package com.app.letschat.controller;
 
+import com.app.letschat.domain.MessageCommand;
+import com.app.letschat.domain.MessageResponse;
 import com.app.letschat.service.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,5 +29,13 @@ public class ChatController {
     chatService.createChat(username, chatName);
     redirectAttributes.addAttribute("username", username);
     return "redirect:/main";
+  }
+
+  @MessageMapping("/send/{chatId}")
+  @SendTo("/topic/chat/{chatId}")
+  public MessageResponse sendMessage(@DestinationVariable("chatId") Long chatId,
+      @Payload MessageCommand messageCommand) {
+
+    return chatService.sendMessage(chatId, messageCommand);
   }
 }

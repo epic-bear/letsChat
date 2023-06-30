@@ -18,7 +18,10 @@
 
 <!-- List of User's Chats -->
 <ul id="chatsList">
-  <li th:each="chat : ${chats}" th:text="${chat.name}"></li>
+  <li th:each="chat : ${chats}" th:data-chat-id="${chat.chatId}" th:data-chat-name="${chat.name}"
+      th:data-username="${username}" onclick="openChatWindow(this)">
+    <span th:text="${chat.name}"></span>
+  </li>
 </ul>
 
 <!-- Chat Window -->
@@ -41,7 +44,13 @@
   </form>
 </div>
 
-<script>
+<script th:inline="javascript">
+  let socket;
+  let stompClient;
+  let chatId;
+  let chatName;
+  let username;
+
   function showCreateChatPopup() {
     let popup = document.getElementById("createChatPopup");
     popup.classList.add("show");
@@ -51,8 +60,77 @@
     let popup = document.getElementById("createChatPopup");
     popup.classList.remove("show");
   }
+
+  function openChatWindow(element) {
+    chatId = element.getAttribute("data-chat-id");
+    chatName = element.getAttribute("data-chat-name");
+    username = element.getAttribute("data-username");
+    let chatWindow = document.getElementById("chatWindow");
+    let chatTitle = document.getElementById("chatTitle");
+    let chatMessages = document.getElementById("chatMessages");
+
+    // Set the chat title
+    chatTitle.textContent = chatName;
+
+    // Clear any previous chat messages
+    chatMessages.innerHTML = "";
+
+    // Show the chat window
+    chatWindow.classList.add("show");
+
+    // Establish WebSocket connection
+    socket = new SockJS(`/ws`);
+    stompClient = Stomp.over(socket);
+
+    // Connect to the WebSocket server
+    stompClient.connect({}, function (frame) {
+      // Subscribe to the chat topic
+      stompClient.subscribe(`/topic/chat/${chatId}`, function (message) {
+        let chatMessage = JSON.parse(message.body);
+        appendMessage(chatMessage.content);
+      });
+    });
+  }
+
+  function closeChatWindow() {
+    let chatWindow = document.getElementById("chatWindow");
+
+    // Disconnect WebSocket connection
+    if (stompClient) {
+      stompClient.disconnect();
+      stompClient = null;
+    }
+
+    // Hide the chat window
+    chatWindow.classList.remove("show");
+  }
+
+  function sendMessage() {
+    let messageInput = document.getElementById("messageInput");
+    let message = messageInput.value;
+
+    // Send the message to the server via WebSocket
+    if (stompClient && chatId && username && message) {
+      let messageCommand = {
+        message: message,
+        username: username,
+        type: 'MESSAGE'
+      };
+      stompClient.send(`/app/send/${chatId}`, {}, JSON.stringify(messageCommand));
+    }
+
+    // Clear the input field after sending the message
+    messageInput.value = "";
+  }
+
+  function appendMessage(message) {
+    let chatMessages = document.getElementById("chatMessages");
+    let li = document.createElement("li");
+    li.textContent = message;
+    chatMessages.appendChild(li);
+  }
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/stomp.min.js"></script>
 </body>
 </html>
