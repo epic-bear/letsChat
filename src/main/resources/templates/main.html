@@ -8,10 +8,8 @@
 <body>
 <!-- Navbar -->
 <div class="navbar">
-  <form id="chatSearchForm">
-    <input type="text" id="chatSearchInput" placeholder="Search Chat">
-    <button type="submit">Search</button>
-  </form>
+  <input type="text" id="chatSearchInput" placeholder="Search Chat" oninput="searchChats(this.value)">
+  <div class="dropdown-content" id="chatListDropdown"></div>
   <button id="createChatButton" onclick="showCreateChatPopup()">Create Chat</button>
   <a href="#">Sign Out</a>
 </div>
@@ -50,6 +48,74 @@
   let chatId;
   let chatName;
   let username;
+  const chatSearchInput = document.getElementById('chatSearchInput');
+  const chatListDropdown = document.getElementById('chatListDropdown');
+
+  chatSearchInput.addEventListener('input', function() {
+    let searchTerm = chatSearchInput.value;
+    searchChats(searchTerm);
+  });
+
+  chatSearchInput.addEventListener('blur', function() {
+    // Hide the chat list dropdown when the input loses focus
+    chatListDropdown.style.display = 'none';
+  });
+
+  function searchChats(searchTerm) {
+    fetch('/searchChat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: `searchTerm=${encodeURIComponent(searchTerm)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+      updateChatDropdown(data);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+  }
+
+  function updateChatDropdown(chatNames) {
+    // Clear the chat list dropdown
+    chatListDropdown.innerHTML = "";
+
+    if (chatNames.length > 0) {
+      // Show the chat list dropdown if there are chat names
+      chatListDropdown.style.display = 'block';
+
+      // Create a container for the chat names
+      let chatNamesContainer = document.createElement("div");
+      chatNamesContainer.classList.add("chat-names-container");
+
+      // Iterate over each chat name
+      chatNames.forEach(function (chatName) {
+        // Create a new chat link
+        let chatLink = document.createElement("a");
+        chatLink.href = "#";
+        chatLink.textContent = chatName;
+
+        // Add an event listener to the chat link to handle click
+        chatLink.addEventListener('click', function() {
+          // Assign the selected chat name to the input value
+          chatSearchInput.value = chatName;
+          // Hide the chat list dropdown
+          chatListDropdown.style.display = 'none';
+        });
+
+        // Add the chat link to the chat names container
+        chatNamesContainer.appendChild(chatLink);
+      });
+
+      // Add the chat names container to the chat list dropdown
+      chatListDropdown.appendChild(chatNamesContainer);
+    } else {
+      // Hide the chat list dropdown if there are no chat names
+      chatListDropdown.style.display = 'none';
+    }
+  }
 
   function showCreateChatPopup() {
     let popup = document.getElementById("createChatPopup");
@@ -130,6 +196,7 @@
     chatMessages.appendChild(li);
   }
 </script>
+<script src="/webjars/jquery/3.1.1-1/jquery.min.js"></script>
 <script src="/webjars/sockjs-client/sockjs.min.js"></script>
 <script src="/webjars/stomp-websocket/stomp.min.js"></script>
 </body>

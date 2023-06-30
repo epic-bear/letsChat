@@ -8,7 +8,9 @@ import com.app.letschat.domain.User;
 import com.app.letschat.repository.ChatMessageRepository;
 import com.app.letschat.repository.ChatRepository;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,5 +72,11 @@ public class ChatService {
     chatMessage.setCreated(LocalDateTime.now());
 
     return messageRepository.save(chatMessage);
+  }
+
+  public List<String> searchChat(String searchTerm) {
+    return chatRepository.findByNameLike(searchTerm + "%").stream()
+        .map(Chat::getName)
+        .collect(Collectors.toList());
   }
 }

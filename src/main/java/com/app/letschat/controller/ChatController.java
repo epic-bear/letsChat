@@ -1,8 +1,12 @@
 package com.app.letschat.controller;
 
+import com.app.letschat.domain.Chat;
 import com.app.letschat.domain.MessageCommand;
 import com.app.letschat.domain.MessageResponse;
 import com.app.letschat.service.ChatService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -11,6 +15,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -37,5 +42,12 @@ public class ChatController {
       @Payload MessageCommand messageCommand) {
 
     return chatService.sendMessage(chatId, messageCommand);
+  }
+
+  @PostMapping("/searchChat")
+  @ResponseBody
+  public List<String> searchChat(@RequestParam("searchTerm") String searchTerm) {
+
+    return chatService.searchChat(searchTerm);
   }
 }

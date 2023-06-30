@@ -55,3 +55,8 @@
     right: 5px;
     cursor: pointer;
 }
+
+.chat-names-container {
+    display: flex;
+    flex-direction: column;
+}
